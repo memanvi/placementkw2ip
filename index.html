@@ -1,6 +1,9 @@
 <!doctype html>
 <html>
     <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <title>NID Placement Smart Card</title>
         <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
         <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
         <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
@@ -23,9 +26,50 @@
                 },
             });
         </script>
+        <style>
+            /* Sleek Mobile UI Overlay for Placement Actions */
+            .placement-ui {
+                position: fixed;
+                bottom: 20px;
+                left: 0;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                z-index: 99999;
+                padding: 0 10px;
+                box-sizing: border-box;
+                pointer-events: auto;
+            }
+            .placement-btn {
+                background: rgba(18, 18, 18, 0.85);
+                color: #ffffff;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 10px 14px;
+                border-radius: 8px;
+                font-family: sans-serif;
+                font-size: 13px;
+                font-weight: 500;
+                cursor: pointer;
+                backdrop-filter: blur(5px);
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+                text-decoration: none;
+                display: inline-block;
+            }
+            .placement-btn:active {
+                background: #b22222;
+            }
+        </style>
     </head>
 
     <body style="margin: 0; overflow: hidden;">
+        <!-- Fixed HTML UI Buttons over the AR Scene -->
+        <div class="placement-ui">
+            <a href="https://your-brochure-link-here.pdf" target="_blank" class="placement-btn">📥 Brochure</a>
+            <a href="https://www.nid.edu" target="_blank" class="placement-btn">🌐 Portfolios</a>
+            <a href="mailto:placement@nid.edu" class="placement-btn">✉️ Email Cell</a>
+        </div>
+
         <a-scene
             vr-mode-ui="enabled: false"
             loading-screen="enabled: false;"
