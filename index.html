@@ -9,52 +9,61 @@
         <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
         <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
         <script>
+            // Switch between 3D discipline models
+            function showDiscipline(modelId) {
+                document.querySelectorAll('.discipline-model').forEach(model => {
+                    model.setAttribute('visible', 'false');
+                });
+                document.getElementById(modelId).setAttribute('visible', 'true');
+            }
+
             AFRAME.registerComponent('videohandler', {
                 init: function () {
                     var marker = this.el;
                     this.vid = document.querySelector("#vid");
 
                     marker.addEventListener('markerFound', function () {
-                        this.toggle = true;
                         this.vid.play();
                     }.bind(this));
 
                     marker.addEventListener('markerLost', function () {
-                        this.toggle = false;
                         this.vid.pause();
                     }.bind(this));
                 },
             });
         </script>
         <style>
-            /* Sleek Mobile UI Overlay for Placement Actions */
             .placement-ui {
                 position: fixed;
                 bottom: 20px;
                 left: 0;
                 width: 100%;
                 display: flex;
-                justify-content: center;
-                gap: 10px;
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
                 z-index: 99999;
                 padding: 0 10px;
                 box-sizing: border-box;
                 pointer-events: auto;
             }
+            .ui-row {
+                display: flex;
+                gap: 8px;
+                justify-content: center;
+            }
             .placement-btn {
-                background: rgba(18, 18, 18, 0.85);
+                background: rgba(18, 18, 18, 0.9);
                 color: #ffffff;
                 border: 1px solid rgba(255, 255, 255, 0.2);
-                padding: 10px 14px;
-                border-radius: 8px;
+                padding: 8px 12px;
+                border-radius: 6px;
                 font-family: sans-serif;
-                font-size: 13px;
+                font-size: 12px;
                 font-weight: 500;
                 cursor: pointer;
                 backdrop-filter: blur(5px);
-                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
                 text-decoration: none;
-                display: inline-block;
             }
             .placement-btn:active {
                 background: #b22222;
@@ -63,11 +72,18 @@
     </head>
 
     <body style="margin: 0; overflow: hidden;">
-        <!-- Fixed HTML UI Buttons over the AR Scene -->
+        <!-- UI Overlay: Model Switcher + Actions -->
         <div class="placement-ui">
-            <a href="https://your-brochure-link-here.pdf" target="_blank" class="placement-btn">📥 Brochure</a>
-            <a href="https://www.nid.edu" target="_blank" class="placement-btn">🌐 Portfolios</a>
-            <a href="mailto:placement@nid.edu" class="placement-btn">✉️ Email Cell</a>
+            <div class="ui-row">
+                <button onclick="showDiscipline('model-textile')" class="placement-btn">🧵 Textile</button>
+                <button onclick="showDiscipline('model-comm')" class="placement-btn">🎨 Communication</button>
+                <button onclick="showDiscipline('model-industrial')" class="placement-btn">⚙️ Industrial</button>
+            </div>
+            <div class="ui-row">
+                <a href="https://your-brochure-link-here.pdf" target="_blank" class="placement-btn">📥 Brochure</a>
+                <a href="https://www.nid.edu" target="_blank" class="placement-btn">🌐 Portfolios</a>
+                <a href="mailto:placement@nid.edu" class="placement-btn">✉️ Email</a>
+            </div>
         </div>
 
         <a-scene
@@ -91,6 +107,10 @@
                     muted
                     playsinline
                 ></video>
+                <!-- Load your 3D models here -->
+                <a-asset-item id="textile-glb" src="assets/textile.glb"></a-asset-item>
+                <a-asset-item id="comm-glb" src="assets/comm.glb"></a-asset-item>
+                <a-asset-item id="industrial-glb" src="assets/industrial.glb"></a-asset-item>
             </a-assets>
 
             <a-marker
@@ -107,14 +127,47 @@
                 cursor="fuse: false; rayOrigin: mouse;"
                 id="markerA"
             >
+                <!-- Background Video Plane -->
                 <a-video
                     src="#vid"
                     scale="1 1 1"
                     position="0 0.1 0"
                     rotation="-90 0 0"
+                ></a-video>
+
+                <!-- 3D Discipline Models (Floats above card, toggleable) -->
+                <a-entity
+                    id="model-textile"
+                    gltf-model="#textile-glb"
+                    scale="0.5 0.5 0.5"
+                    position="0 0.5 0"
+                    rotation="0 0 0"
                     class="clickable"
                     gesture-handler
-                ></a-video>
+                    visible="true">
+                </a-entity>
+
+                <a-entity
+                    id="model-comm"
+                    gltf-model="#comm-glb"
+                    scale="0.5 0.5 0.5"
+                    position="0 0.5 0"
+                    rotation="0 0 0"
+                    class="clickable"
+                    gesture-handler
+                    visible="false">
+                </a-entity>
+
+                <a-entity
+                    id="model-industrial"
+                    gltf-model="#industrial-glb"
+                    scale="0.5 0.5 0.5"
+                    position="0 0.5 0"
+                    rotation="0 0 0"
+                    class="clickable"
+                    gesture-handler
+                    visible="false">
+                </a-entity>
             </a-marker>
 
             <a-entity camera></a-entity>
